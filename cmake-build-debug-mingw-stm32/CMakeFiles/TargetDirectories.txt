@@ -1,0 +1,3 @@
+D:/Myself/32/F407VET6/cmake-build-debug-mingw-stm32/CMakeFiles/VET6.elf.dir
+D:/Myself/32/F407VET6/cmake-build-debug-mingw-stm32/CMakeFiles/edit_cache.dir
+D:/Myself/32/F407VET6/cmake-build-debug-mingw-stm32/CMakeFiles/rebuild_cache.dir
