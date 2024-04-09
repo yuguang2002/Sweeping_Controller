@@ -28,8 +28,7 @@ void Sweep_Motor_ON(void)
 {
     while (1)
     {
-        HAL_GPIO_WritePin(CONMM_GPIO_Port, CONMM_Pin, GPIO_PIN_SET);
-        HAL_Delay(100);
+        HAL_GPIO_WritePin(CONMM_GPIO_Port, CONMM_Pin, GPIO_PIN_RESET);
     }
 }
 
