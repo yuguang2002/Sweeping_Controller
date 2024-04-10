@@ -47,16 +47,18 @@
 /* USER CODE BEGIN Variables */
 
 /* USER CODE END Variables */
+osThreadId MoveTaskHandle;
 osThreadId LedTaskHandle;
-osThreadId UartTaskHandle;
+osThreadId UsartTaskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
 /* USER CODE END FunctionPrototypes */
 
+void StartMoveTask(void const * argument);
 void StartLedTask(void const * argument);
-void StartUartTask(void const * argument);
+void StartUsartTask(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -103,13 +105,17 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
+  /* definition and creation of MoveTask */
+  osThreadDef(MoveTask, StartMoveTask, osPriorityNormal, 0, 128);
+  MoveTaskHandle = osThreadCreate(osThread(MoveTask), NULL);
+
   /* definition and creation of LedTask */
-  osThreadDef(LedTask, StartLedTask, osPriorityNormal, 0, 128);
+  osThreadDef(LedTask, StartLedTask, osPriorityRealtime, 0, 128);
   LedTaskHandle = osThreadCreate(osThread(LedTask), NULL);
 
-  /* definition and creation of UartTask */
-  osThreadDef(UartTask, StartUartTask, osPriorityNormal, 0, 128);
-  UartTaskHandle = osThreadCreate(osThread(UartTask), NULL);
+  /* definition and creation of UsartTask */
+  osThreadDef(UsartTask, StartUsartTask, osPriorityBelowNormal, 0, 128);
+  UsartTaskHandle = osThreadCreate(osThread(UsartTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -117,12 +123,30 @@ void MX_FREERTOS_Init(void) {
 
 }
 
-/* USER CODE BEGIN Header_StartLedTask */
+/* USER CODE BEGIN Header_StartMoveTask */
 /**
-  * @brief  Function implementing the LedTask thread.
+  * @brief  Function implementing the MoveTask thread.
   * @param  argument: Not used
   * @retval None
   */
+/* USER CODE END Header_StartMoveTask */
+__weak void StartMoveTask(void const * argument)
+{
+  /* USER CODE BEGIN StartMoveTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartMoveTask */
+}
+
+/* USER CODE BEGIN Header_StartLedTask */
+/**
+* @brief Function implementing the LedTask thread.
+* @param argument: Not used
+* @retval None
+*/
 /* USER CODE END Header_StartLedTask */
 __weak void StartLedTask(void const * argument)
 {
@@ -135,22 +159,22 @@ __weak void StartLedTask(void const * argument)
   /* USER CODE END StartLedTask */
 }
 
-/* USER CODE BEGIN Header_StartUartTask */
+/* USER CODE BEGIN Header_StartUsartTask */
 /**
-* @brief Function implementing the UartTask thread.
+* @brief Function implementing the UsartTask thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_StartUartTask */
-__weak void StartUartTask(void const * argument)
+/* USER CODE END Header_StartUsartTask */
+__weak void StartUsartTask(void const * argument)
 {
-  /* USER CODE BEGIN StartUartTask */
+  /* USER CODE BEGIN StartUsartTask */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END StartUartTask */
+  /* USER CODE END StartUsartTask */
 }
 
 /* Private application code --------------------------------------------------*/
