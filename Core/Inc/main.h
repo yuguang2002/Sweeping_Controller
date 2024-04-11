@@ -57,6 +57,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define LS_DS_BL_Pin GPIO_PIN_14
+#define LS_DS_BL_GPIO_Port GPIOC
 #define VM_PWM_Y_Pin GPIO_PIN_15
 #define VM_PWM_Y_GPIO_Port GPIOC
 #define ADC8_Pin GPIO_PIN_1
@@ -107,6 +109,8 @@ void Error_Handler(void);
 #define CONVACM_GPIO_Port GPIOD
 #define KEY0_Pin GPIO_PIN_11
 #define KEY0_GPIO_Port GPIOD
+#define RS_DS_BL_Pin GPIO_PIN_12
+#define RS_DS_BL_GPIO_Port GPIOD
 #define LED3_Pin GPIO_PIN_13
 #define LED3_GPIO_Port GPIOD
 #define LED0_Pin GPIO_PIN_0

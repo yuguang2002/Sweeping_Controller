@@ -12,7 +12,6 @@ void Vacuum_Motor_ON(void)
     while (1)
     {
         HAL_GPIO_WritePin(VM_PWM_Y_GPIO_Port, VM_PWM_Y_Pin, GPIO_PIN_SET);
-        HAL_Delay(100);
     }
 }
 

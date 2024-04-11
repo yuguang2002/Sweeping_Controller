@@ -29,9 +29,11 @@
 /* USER CODE BEGIN Includes */
 #include "../App/retarget.h"
 #include <stdio.h>
-#include "../App/move.h"
 #include "../App/usart.h"
+#include "../App/move.h"
 #include "../App/actuators.h"
+#include "../App/fall_prevention.h"
+#include "../App/avoiding.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,10 +102,10 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-  RetargetInit(&huart3);
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
+  RetargetInit(&huart3);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
@@ -141,12 +143,13 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25;
-  RCC_OscInitStruct.PLL.PLLN = 336;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -171,42 +174,83 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
+/* USER CODE BEGIN Header_StartUsartTask */
+/**
+* @brief Function implementing the UsartTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartUsartTask */
+void StartUsartTask(void const * argument)
+{
+    /* USER CODE BEGIN StartUsartTask */
+    /* Infinite loop */
+    for(;;)
+    {
+        printf("你好");
+        osDelay(100);
+        osDelay(1);
+    }
+    /* USER CODE END StartUsartTask */
+}
+
+/* USER CODE BEGIN Header_StartLedTask */
+/**
+* @brief Function implementing the LedTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartLedTask */
 void StartLedTask(void const * argument)
 {
     /* USER CODE BEGIN StartLedTask */
     /* Infinite loop */
     for(;;)
     {
-        LED0_ON;
-        osDelay(500);
-        LED0_OFF;
-        osDelay(500);
-        LED1_ON;
-        osDelay(500);
-        LED1_OFF;
-        osDelay(500);
-        LED2_ON;
-        osDelay(500);
-        LED2_OFF;
-        osDelay(500);
-        LED3_ON;
-        osDelay(500);
-        LED3_OFF;
-        osDelay(500);
+
+        osDelay(100);
+        osDelay(1);
     }
     /* USER CODE END StartLedTask */
 }
 
-void StartUartTask(void const * argument)
+/* USER CODE BEGIN Header_StartMoveTask */
+/**
+  * @brief  Function implementing the MoveTask thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_StartMoveTask */
+void StartMoveTask(void const * argument)
 {
     /* USER CODE BEGIN StartUartTask */
     /* Infinite loop */
     for(;;)
     {
-        Vacuum_Motor_ON();
-        Clean_Motor_ON();
+        Avoiding_Start(20);
+
+//        if(LS_OFF)
+//        {
+//            LED1_ON;
+//        }
+//        else if(LS_ON)
+//        {
+//            LED1_OFF;
+//        }
+//
+//        if(RS_OFF)
+//        {
+//            LED0_ON;
+//        }
+//        else if(RS_ON)
+//        {
+//            LED0_OFF;
+//        }
+
+//        Vacuum_Motor_ON();
+//        Clean_Motor_ON();
 //        Sweep_Motor_ON();
-        Move_Forward(0);
+//        Move_Forward(0);
 
         osDelay(1);
     }
