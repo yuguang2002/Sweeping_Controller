@@ -1,0 +1,3 @@
+D:/STM32Cube_project/MicroIMU/cmake-build-debug/CMakeFiles/MicroIMU.elf.dir
+D:/STM32Cube_project/MicroIMU/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/STM32Cube_project/MicroIMU/cmake-build-debug/CMakeFiles/rebuild_cache.dir
