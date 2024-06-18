@@ -19,21 +19,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
-#include "adc.h"
-#include "i2c.h"
-#include "spi.h"
-#include "tim.h"
-#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "../App/retarget.h"
-#include <stdio.h>
-#include "../App/usart.h"
-#include "../App/move.h"
-#include "../App/actuators.h"
-#include "../App/fall_prevention.h"
-#include "../App/avoiding.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,15 +86,21 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_I2C1_Init();
-  MX_SPI3_Init();
   MX_ADC1_Init();
   MX_TIM1_Init();
+  MX_TIM2_Init();
+  MX_TIM5_Init();
+  MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
-  RetargetInit(&huart3);
+  RetargetInit(&huart1); // 串口打印重定向初始化
+  HAL_UART_Receive_IT(&huart3, &receivedData, 1); // 开启串口中断
+  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_ALL);
+  HAL_TIM_Base_Start_IT(&htim14); // 定时器中断初始化
+  User_HalInit(); // IMU初始化
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
@@ -173,112 +168,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-/* USER CODE BEGIN Header_StartUsartTask */
-/**
-* @brief Function implementing the UsartTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartUsartTask */
-void StartUsartTask(void const * argument)
-{
-    /* USER CODE BEGIN StartUsartTask */
-    /* Infinite loop */
-    for(;;)
-    {
-        printf("浣犲ソ");
-        osDelay(100);
-        osDelay(1);
-    }
-    /* USER CODE END StartUsartTask */
-}
-
-/* USER CODE BEGIN Header_StartLedTask */
-/**
-* @brief Function implementing the LedTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartLedTask */
-void StartLedTask(void const * argument)
-{
-    /* USER CODE BEGIN StartLedTask */
-    /* Infinite loop */
-    for(;;)
-    {
-
-        osDelay(100);
-        osDelay(1);
-    }
-    /* USER CODE END StartLedTask */
-}
-
-/* USER CODE BEGIN Header_StartMoveTask */
-/**
-  * @brief  Function implementing the MoveTask thread.
-  * @param  argument: Not used
-  * @retval None
-  */
-/* USER CODE END Header_StartMoveTask */
-void StartMoveTask(void const * argument)
-{
-    /* USER CODE BEGIN StartUartTask */
-    /* Infinite loop */
-    for(;;)
-    {
-        Avoiding_Start(20);
-
-//        if(LS_OFF)
-//        {
-//            LED1_ON;
-//        }
-//        else if(LS_ON)
-//        {
-//            LED1_OFF;
-//        }
-//
-//        if(RS_OFF)
-//        {
-//            LED0_ON;
-//        }
-//        else if(RS_ON)
-//        {
-//            LED0_OFF;
-//        }
-
-//        Vacuum_Motor_ON();
-//        Clean_Motor_ON();
-//        Sweep_Motor_ON();
-//        Move_Forward(0);
-
-        osDelay(1);
-    }
-    /* USER CODE END StartUartTask */
-}
-
 /* USER CODE END 4 */
-
-/**
-  * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM7 interrupt took place, inside
-  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
-  * a global variable "uwTick" used as application time base.
-  * @param  htim : TIM handle
-  * @retval None
-  */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-  /* USER CODE BEGIN Callback 0 */
-
-  /* USER CODE END Callback 0 */
-  if (htim->Instance == TIM7) {
-    HAL_IncTick();
-  }
-  /* USER CODE BEGIN Callback 1 */
-
-  /* USER CODE END Callback 1 */
-}
 
 /**
   * @brief  This function is executed in case of error occurrence.
@@ -287,7 +177,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
+  /* User can add his own implementation to report the JY901s error return state */
   __disable_irq();
   while (1)
   {

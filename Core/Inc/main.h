@@ -31,7 +31,28 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "cmsis_os.h"
+#include "../Hard/adc/adc.h"
+#include "../Hard/tim/tim.h"
+#include "../Hard/gpio/gpio.h"
+#include <stdio.h>
+#include <math.h>
+#include "../App/actuators/actuators.h"
+#include "../App/autosweep/autosweep.h"
+#include "../App/avoiding/avoiding.h"
+#include "../App/bluetooth/bluetooth.h"
+#include "../App/commander/commander.h"
+#include "../App/encoder/encoder.h"
+#include "../App/fall_prevention/fall_prevention.h"
+#include "../App/move/move.h"
+#include "../App/pid/pid.h"
+#include "../Hard/adc/adc.h"
+#include "../Hard/gpio/gpio.h"
+#include "../Hard/i2c/i2c.h"
+#include "../Hard/JY901s/HAL.h"
+#include "../Hard/retarget/retarget.h"
+#include "../Hard/tim/tim.h"
+#include "../Hard/usart/usart.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -119,7 +140,10 @@ void Error_Handler(void);
 #define LED1_GPIO_Port GPIOD
 
 /* USER CODE BEGIN Private defines */
-
+extern osThreadId AutoSweepTaskHandle;
+extern osThreadId LedTaskHandle;
+extern osThreadId BleTaskHandle;
+extern osThreadId CommanderTaskHandle;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
