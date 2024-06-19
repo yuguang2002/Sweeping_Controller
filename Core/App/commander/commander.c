@@ -21,10 +21,10 @@ void StartCommanderTask(void const * argument)
     for(;;)
     {
 //        Move_Forward(20);
-//        Imu_Test();
+        Imu_Test();
 //        GetImuEuler(mag_euler+3);
 //        printf("Euler:%.2f %.2f %.2f \r\n",mag_euler[3],mag_euler[4],mag_euler[5]);
-//        vTaskDelay(100);
+        vTaskDelay(100);
 //        printf("distance:%d speed_l:%d speed_r:%d \r\n",distance_get(encoder_count_l,encoder_count_r),speed_get_l(delta_count_l),speed_get_r(delta_count_r));
 //        vTaskDelay(500);
 //        printf("encoder_count_l:%d encoder_count_r:%d \r\n",encoder_count_l,encoder_count_r);
